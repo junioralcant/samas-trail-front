@@ -5,6 +5,7 @@ import {ChangeEvent, useEffect} from 'react';
 import {SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {Input, Row} from './components';
 import {inputCPFMask, inputDateMask} from './utils';
+import {toast} from 'react-toastify';
 
 type Inputs = {
   nama: string;
@@ -39,6 +40,8 @@ export default function Home() {
   function handleAge(e: ChangeEvent<HTMLInputElement>) {
     setValue('age', inputDateMask(e.target.value));
   }
+
+  toast.error('🦄 Wow so easy!');
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
