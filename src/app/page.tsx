@@ -1,23 +1,16 @@
 'use client';
 
 import {Wallet, initMercadoPago} from '@mercadopago/sdk-react';
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  InputHTMLAttributes,
-  useEffect,
-} from 'react';
+import {ChangeEvent, useEffect} from 'react';
 import {SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {Input, Row} from './components';
-import {log} from 'console';
-import {inputCPFMask} from './utils';
+import {inputCPFMask, inputDateMask} from './utils';
 
 type Inputs = {
   nama: string;
   cpf: string;
   age: string;
   city: string;
-  state: string;
   phone: string;
   email: string;
   team: string;
@@ -41,6 +34,10 @@ export default function Home() {
 
   function handleCorrectCPF(e: ChangeEvent<HTMLInputElement>) {
     setValue('cpf', inputCPFMask(e.target.value));
+  }
+
+  function handleAge(e: ChangeEvent<HTMLInputElement>) {
+    setValue('age', inputDateMask(e.target.value));
   }
 
   return (
@@ -70,6 +67,8 @@ export default function Home() {
             name="age"
             placeholder="Data de nascimento"
             control={control}
+            onChange={handleAge}
+            maxLength={10}
           />
         </Row>
 
@@ -78,13 +77,6 @@ export default function Home() {
             className="w-[48%]"
             name="city"
             placeholder="Cidade"
-            control={control}
-          />
-
-          <Input
-            className="w-[48%]"
-            name="state"
-            placeholder="Estado"
             control={control}
           />
         </Row>
