@@ -1,14 +1,14 @@
 'use client';
 
 import {Wallet, initMercadoPago} from '@mercadopago/sdk-react';
-import {ChangeEvent, useEffect} from 'react';
+import {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {Input, Row} from './components';
 import {inputCPFMask, inputDateMask} from './utils';
 import {toast} from 'react-toastify';
 
 type Inputs = {
-  nama: string;
+  name: string;
   cpf: string;
   age: string;
   city: string;
@@ -19,6 +19,15 @@ type Inputs = {
 };
 
 export default function Home() {
+  const [errorInputName, setErrorInputName] = useState(false);
+  const [errorInputCPF, setErrorInputCPF] = useState(false);
+  const [errorInputAge, setErrorInputAge] = useState(false);
+  const [errorInputCity, setErrorInputCity] = useState(false);
+  const [errorInputPhone, setErrorInputPhone] = useState(false);
+  const [errorInputEmail, setErrorInputEmail] = useState(false);
+  const [errorInputTeam, setErrorInputTeam] = useState(false);
+  const [errorInputDistance, setErrorInputDistance] = useState(false);
+
   useEffect(() => {
     initMercadoPago('APP_USR-ccfb6947-5609-4f60-bb64-f63d9d9f207b', {
       locale: 'pt-BR',
@@ -29,9 +38,57 @@ export default function Home() {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: {errors},
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    setErrorInputName(false);
+    setErrorInputCPF(false);
+    setErrorInputAge(false);
+    setErrorInputCity(false);
+    setErrorInputPhone(false);
+    setErrorInputEmail(false);
+    setErrorInputDistance(false);
+
+    if (!data.name) {
+      toast.error('Preencha o campo de Nome completo!', {
+        theme: 'dark',
+      });
+      setErrorInputName(true);
+    }
+
+    if (!data.cpf) {
+      toast.error('Preencha o campo de CPF!', {theme: 'dark'});
+      setErrorInputCPF(true);
+    }
+
+    if (!data.age) {
+      toast.error('Preencha o campo de Data de Nascimento!', {
+        theme: 'dark',
+      });
+      setErrorInputAge(true);
+    }
+
+    if (!data.city) {
+      toast.error('Preencha o campo de Cidade!', {theme: 'dark'});
+      setErrorInputCity(true);
+    }
+
+    if (!data.phone) {
+      toast.error('Preencha o campo de Telefone!', {theme: 'dark'});
+      setErrorInputPhone(true);
+    }
+
+    if (!data.email) {
+      toast.error('Preencha o campo de E-mail!', {theme: 'dark'});
+      setErrorInputEmail(true);
+    }
+
+    if (!data.distance) {
+      toast.error('Informe o campo de Distância!', {theme: 'dark'});
+      setErrorInputDistance(true);
+    }
+  };
 
   function handleCorrectCPF(e: ChangeEvent<HTMLInputElement>) {
     setValue('cpf', inputCPFMask(e.target.value));
@@ -40,8 +97,6 @@ export default function Home() {
   function handleAge(e: ChangeEvent<HTMLInputElement>) {
     setValue('age', inputDateMask(e.target.value));
   }
-
-  toast.error('🦄 Wow so easy!');
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -53,6 +108,7 @@ export default function Home() {
           name="name"
           placeholder="Nome completo"
           control={control}
+          error={errorInputName}
         />
 
         <Row>
@@ -63,6 +119,7 @@ export default function Home() {
             control={control}
             onChange={handleCorrectCPF}
             maxLength={14}
+            error={errorInputCPF}
           />
 
           <Input
@@ -72,6 +129,7 @@ export default function Home() {
             control={control}
             onChange={handleAge}
             maxLength={10}
+            error={errorInputAge}
           />
         </Row>
 
@@ -81,6 +139,7 @@ export default function Home() {
             name="city"
             placeholder="Cidade"
             control={control}
+            error={errorInputCity}
           />
         </Row>
 
@@ -89,7 +148,7 @@ export default function Home() {
           control={control}
           render={({field}) => (
             <select
-              className="p-2 rounded w-24 text-gray-500"
+              className={`p-2 rounded w-24 text-gray-500 ${errorInputDistance ? 'border-red-500 border-2' : 'border-2'}`}
               {...field}
             >
               <option value="">KM</option>
@@ -106,6 +165,7 @@ export default function Home() {
             placeholder="E-mail"
             type="email"
             control={control}
+            error={errorInputEmail}
           />
 
           <Input
@@ -113,6 +173,7 @@ export default function Home() {
             name="phone"
             placeholder="Telefone"
             control={control}
+            error={errorInputPhone}
           />
         </Row>
 
