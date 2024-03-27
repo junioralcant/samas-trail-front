@@ -50,15 +50,25 @@ export default function Home() {
       setErrorInputName(true);
     }
 
-    if (!data.cpf) {
-      toast.error('Preencha o campo de CPF!', {theme: 'dark'});
+    if (!data.cpf || data.cpf.length < 14) {
+      toast.error(
+        data.cpf?.length < 14
+          ? 'CPF Inválido!'
+          : 'Preencha o campo de CPF!',
+        {theme: 'dark'}
+      );
       setErrorInputCPF(true);
     }
 
-    if (!data.age) {
-      toast.error('Preencha o campo de Data de Nascimento!', {
-        theme: 'dark',
-      });
+    if (!data.age || data.age.length < 8) {
+      toast.error(
+        data.age?.length < 8
+          ? 'Data Inválida!'
+          : 'Preencha o campo de Data de Nascimento!',
+        {
+          theme: 'dark',
+        }
+      );
       setErrorInputAge(true);
     }
 
@@ -67,8 +77,13 @@ export default function Home() {
       setErrorInputCity(true);
     }
 
-    if (!data.phone) {
-      toast.error('Preencha o campo de Telefone!', {theme: 'dark'});
+    if (!data.phone || data.phone.length < 15) {
+      toast.error(
+        data.phone?.length < 15
+          ? 'Telefone Inválido!'
+          : 'Preencha o campo de Telefone!',
+        {theme: 'dark'}
+      );
       setErrorInputPhone(true);
     }
 
