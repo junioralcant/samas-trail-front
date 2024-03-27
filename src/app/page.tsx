@@ -4,7 +4,7 @@ import {Wallet, initMercadoPago} from '@mercadopago/sdk-react';
 import {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {Input, Row} from './components';
-import {inputCPFMask, inputDateMask} from './utils';
+import {inputCPFMask, inputDateMask, inputPhoneMask} from './utils';
 import {toast} from 'react-toastify';
 
 type Inputs = {
@@ -25,7 +25,6 @@ export default function Home() {
   const [errorInputCity, setErrorInputCity] = useState(false);
   const [errorInputPhone, setErrorInputPhone] = useState(false);
   const [errorInputEmail, setErrorInputEmail] = useState(false);
-  const [errorInputTeam, setErrorInputTeam] = useState(false);
   const [errorInputDistance, setErrorInputDistance] = useState(false);
 
   useEffect(() => {
@@ -34,13 +33,7 @@ export default function Home() {
     });
   }, []);
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: {errors},
-  } = useForm<Inputs>();
+  const {control, handleSubmit, setValue} = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     setErrorInputName(false);
     setErrorInputCPF(false);
@@ -96,6 +89,10 @@ export default function Home() {
 
   function handleAge(e: ChangeEvent<HTMLInputElement>) {
     setValue('age', inputDateMask(e.target.value));
+  }
+
+  function handlePhone(e: ChangeEvent<HTMLInputElement>) {
+    setValue('phone', inputPhoneMask(e.target.value));
   }
 
   return (
@@ -173,7 +170,9 @@ export default function Home() {
             name="phone"
             placeholder="Telefone"
             control={control}
+            onChange={handlePhone}
             error={errorInputPhone}
+            maxLength={15}
           />
         </Row>
 
