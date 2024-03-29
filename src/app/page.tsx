@@ -1,11 +1,12 @@
 'use client';
 
 import {Wallet, initMercadoPago} from '@mercadopago/sdk-react';
-import {ChangeEvent, useEffect, useRef, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import {SubmitHandler, useForm, Controller} from 'react-hook-form';
 import {Input, Row} from './components';
 import {inputCPFMask, inputDateMask, inputPhoneMask} from './utils';
 import {toast} from 'react-toastify';
+import axios from 'axios';
 
 type Inputs = {
   name: string;
@@ -34,7 +35,7 @@ export default function Home() {
   }, []);
 
   const {control, handleSubmit, setValue} = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setErrorInputName(false);
     setErrorInputCPF(false);
     setErrorInputAge(false);
@@ -48,6 +49,7 @@ export default function Home() {
         theme: 'dark',
       });
       setErrorInputName(true);
+      return;
     }
 
     if (!data.cpf || data.cpf.length < 14) {
@@ -58,6 +60,7 @@ export default function Home() {
         {theme: 'dark'}
       );
       setErrorInputCPF(true);
+      return;
     }
 
     if (!data.age || data.age.length < 8) {
@@ -70,11 +73,13 @@ export default function Home() {
         }
       );
       setErrorInputAge(true);
+      return;
     }
 
     if (!data.city) {
-      toast.error('Preencha o campo de Cidade!', {theme: 'dark'});
+      toast.error('Preencha o campo de Cidade!');
       setErrorInputCity(true);
+      return;
     }
 
     if (!data.phone || data.phone.length < 15) {
@@ -85,16 +90,49 @@ export default function Home() {
         {theme: 'dark'}
       );
       setErrorInputPhone(true);
+      return;
     }
 
     if (!data.email) {
-      toast.error('Preencha o campo de E-mail!', {theme: 'dark'});
+      toast.error('Preencha o campo de E-mail!');
       setErrorInputEmail(true);
+      return;
     }
 
     if (!data.distance) {
-      toast.error('Informe o campo de Distância!', {theme: 'dark'});
+      toast.error('Informe o campo de Distância!');
       setErrorInputDistance(true);
+      return;
+    }
+
+    try {
+      await axios.post(
+        'http://localhost:3333/api/v1/user',
+        {
+          name: data.name,
+          cpf: data.cpf,
+          age: data.age,
+          city: data.city,
+          phone: data.phone,
+          email: data.email,
+          team: data.team || '',
+          distance: data.distance,
+        },
+        {headers: {'Content-Type': 'application/json'}}
+      );
+      toast.success('Usuário criado com sucesso!');
+
+      setValue('name', '');
+      setValue('cpf', '');
+      setValue('age', '');
+      setValue('city', '');
+      setValue('phone', '');
+      setValue('email', '');
+      setValue('team', '');
+      setValue('distance', '');
+    } catch (error) {
+      toast.error('Erro ao cadastrar o usuário!');
+      console.log(error);
     }
   };
 
@@ -111,12 +149,13 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex  min-h-screen flex-col items-center justify-center p-24 ">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col items-start gap-4 w-screen md:w-[500px]  p-2"
       >
         <Input
+          label="Nome Completo"
           name="name"
           placeholder="Nome completo"
           control={control}
@@ -125,6 +164,7 @@ export default function Home() {
 
         <Row>
           <Input
+            label="CPF"
             className="w-[48%]"
             name="cpf"
             placeholder="CPF"
@@ -135,6 +175,7 @@ export default function Home() {
           />
 
           <Input
+            label="Data de Nascimento"
             className="w-[48%]"
             name="age"
             placeholder="Data de nascimento"
@@ -147,6 +188,7 @@ export default function Home() {
 
         <Row>
           <Input
+            label="Cidade"
             className="w-[48%]"
             name="city"
             placeholder="Cidade"
@@ -159,19 +201,23 @@ export default function Home() {
           name="distance"
           control={control}
           render={({field}) => (
-            <select
-              className={`p-2 rounded w-24 text-gray-500 ${errorInputDistance ? 'border-red-500 border-2' : 'border-2'}`}
-              {...field}
-            >
-              <option value="">KM</option>
-              <option value="8">8KM</option>
-              <option value="16">16KM</option>
-            </select>
+            <div className="flex flex-col w-full">
+              <label className="text-gray-400">Distância</label>
+              <select
+                className={`p-2 rounded w-full text-gray-500 ${errorInputDistance ? 'border-red-500 border-2' : 'border-2'}`}
+                {...field}
+              >
+                <option value="">KM</option>
+                <option value="8">8KM</option>
+                <option value="16">16KM</option>
+              </select>
+            </div>
           )}
         />
 
         <Row>
           <Input
+            label="E-mail"
             className="w-[48%]"
             name="email"
             placeholder="E-mail"
@@ -181,6 +227,7 @@ export default function Home() {
           />
 
           <Input
+            label="Telefone"
             className="w-[48%]"
             name="phone"
             placeholder="Telefone"
@@ -191,11 +238,16 @@ export default function Home() {
           />
         </Row>
 
-        <Input name="team" placeholder="Equipe" control={control} />
+        <Input
+          label="Equipe"
+          name="team"
+          placeholder="Equipe"
+          control={control}
+        />
 
         <input
           type="submit"
-          className="bg-green-500 hover:bg-green-700 transition-all w-40 h-10 rounded text-white text-lg cursor-pointer"
+          className="w-full mt-5 bg-green-500 hover:bg-green-700 transition-all h-11 rounded text-white text-lg cursor-pointer"
           value="Cadastrar"
         />
       </form>
