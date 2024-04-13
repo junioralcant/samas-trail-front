@@ -1,11 +1,11 @@
 'use client';
 
-import {Wallet, initMercadoPago} from '@mercadopago/sdk-react';
-import {ChangeEvent, useEffect, useState} from 'react';
-import {SubmitHandler, useForm, Controller} from 'react-hook-form';
-import {Input, Row} from './components';
-import {inputCPFMask, inputDateMask, inputPhoneMask} from './utils';
+import {useSearchParams} from 'next/navigation';
+import {ChangeEvent, useState} from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
+import {inputCPFMask, inputDateMask, inputPhoneMask} from './utils';
+import {Input, Row} from './components';
 import axios from 'axios';
 
 type Inputs = {
@@ -17,9 +17,12 @@ type Inputs = {
   email: string;
   team: string;
   distance: string;
+  shirtSize: string;
 };
 
-export default function Home() {
+export const PREFIX_LOCAL_STORAGE = '@samas-trail:';
+
+export default function Cadastro() {
   const [errorInputName, setErrorInputName] = useState(false);
   const [errorInputCPF, setErrorInputCPF] = useState(false);
   const [errorInputAge, setErrorInputAge] = useState(false);
@@ -27,12 +30,8 @@ export default function Home() {
   const [errorInputPhone, setErrorInputPhone] = useState(false);
   const [errorInputEmail, setErrorInputEmail] = useState(false);
   const [errorInputDistance, setErrorInputDistance] = useState(false);
-
-  useEffect(() => {
-    initMercadoPago('APP_USR-ccfb6947-5609-4f60-bb64-f63d9d9f207b', {
-      locale: 'pt-BR',
-    });
-  }, []);
+  const [errorInputShirtSize, setErrorInputShirtSize] =
+    useState(false);
 
   const {control, handleSubmit, setValue} = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -56,8 +55,7 @@ export default function Home() {
       toast.error(
         data.cpf?.length < 14
           ? 'CPF Inválido!'
-          : 'Preencha o campo de CPF!',
-        {theme: 'dark'}
+          : 'Preencha o campo de CPF!'
       );
       setErrorInputCPF(true);
       return;
@@ -67,10 +65,7 @@ export default function Home() {
       toast.error(
         data.age?.length < 8
           ? 'Data Inválida!'
-          : 'Preencha o campo de Data de Nascimento!',
-        {
-          theme: 'dark',
-        }
+          : 'Preencha o campo de Data de Nascimento!'
       );
       setErrorInputAge(true);
       return;
@@ -86,8 +81,7 @@ export default function Home() {
       toast.error(
         data.phone?.length < 15
           ? 'Telefone Inválido!'
-          : 'Preencha o campo de Telefone!',
-        {theme: 'dark'}
+          : 'Preencha o campo de Telefone!'
       );
       setErrorInputPhone(true);
       return;
@@ -104,9 +98,14 @@ export default function Home() {
       setErrorInputDistance(true);
       return;
     }
+    if (!data.shirtSize) {
+      toast.error('Informe o tamanho da camisa!');
+      setErrorInputShirtSize(true);
+      return;
+    }
 
     try {
-      await axios.post(
+      await axios.post<{data: {id: string}}>(
         'http://localhost:3333/api/v1/user',
         {
           name: data.name,
@@ -117,9 +116,11 @@ export default function Home() {
           email: data.email,
           team: data.team || '',
           distance: data.distance,
+          shirtSize: data.shirtSize,
         },
         {headers: {'Content-Type': 'application/json'}}
       );
+
       toast.success('Usuário criado com sucesso!');
 
       setValue('name', '');
@@ -130,6 +131,7 @@ export default function Home() {
       setValue('email', '');
       setValue('team', '');
       setValue('distance', '');
+      setValue('shirtSize', '');
     } catch (error) {
       toast.error('Erro ao cadastrar o usuário!');
       console.log(error);
@@ -215,6 +217,28 @@ export default function Home() {
           )}
         />
 
+        <Controller
+          name="shirtSize"
+          control={control}
+          render={({field}) => (
+            <div className="flex flex-col w-full">
+              <label className="text-gray-400">
+                Tamanho da camisa
+              </label>
+              <select
+                className={`p-2 rounded w-full text-gray-500 ${errorInputShirtSize ? 'border-red-500 border-2' : 'border-2'}`}
+                {...field}
+              >
+                <option value="">Escolha</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+              </select>
+            </div>
+          )}
+        />
+
         <Row>
           <Input
             label="E-mail"
@@ -251,14 +275,6 @@ export default function Home() {
           value="Cadastrar"
         />
       </form>
-      <div>
-        {/* <Wallet
-          initialization={{
-            preferenceId:
-              '186097166-4e8ff5a3-300c-4d16-ba9a-ee70c14f0903',
-          }}
-        /> */}
-      </div>
     </main>
   );
 }
