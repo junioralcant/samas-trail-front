@@ -20,8 +20,6 @@ type Inputs = {
   shirtSize: string;
 };
 
-export const PREFIX_LOCAL_STORAGE = '@samas-trail:';
-
 export default function Cadastro() {
   const [errorInputName, setErrorInputName] = useState(false);
   const [errorInputCPF, setErrorInputCPF] = useState(false);

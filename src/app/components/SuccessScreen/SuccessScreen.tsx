@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {toast} from 'react-toastify';
-import {PREFIX_LOCAL_STORAGE} from '@/app/page';
+import {PREFIX_LOCAL_STORAGE} from '@/app/utils';
 
 type Props = {
   preferenceId: string | null;

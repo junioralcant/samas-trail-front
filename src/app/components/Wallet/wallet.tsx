@@ -1,4 +1,4 @@
-import {PREFIX_LOCAL_STORAGE} from '@/app/page';
+import {PREFIX_LOCAL_STORAGE} from '@/app/utils';
 import {Wallet} from '@mercadopago/sdk-react';
 import axios from 'axios';
 import {toast} from 'react-toastify';
