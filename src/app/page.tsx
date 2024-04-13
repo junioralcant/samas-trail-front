@@ -132,9 +132,13 @@ export default function Cadastro() {
       setValue('team', '');
       setValue('distance', '');
       setValue('shirtSize', '');
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.data.message === 'CPF already exists') {
+        toast.error('CPF ja cadastrado!');
+        return;
+      }
+
       toast.error('Erro ao cadastrar o usuário!');
-      console.log(error);
     }
   };
 
