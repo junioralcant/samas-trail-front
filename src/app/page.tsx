@@ -8,7 +8,7 @@ import {inputCPFMask, inputDateMask, inputPhoneMask} from './utils';
 import {Input, Row} from './components';
 import axios from 'axios';
 
-type Inputs = {
+export type UserModel = {
   name: string;
   cpf: string;
   age: string;
@@ -32,8 +32,8 @@ export default function Cadastro() {
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {control, handleSubmit, setValue} = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const {control, handleSubmit, setValue} = useForm<UserModel>();
+  const onSubmit: SubmitHandler<UserModel> = async (data) => {
     setErrorInputName(false);
     setErrorInputCPF(false);
     setErrorInputAge(false);
@@ -216,8 +216,8 @@ export default function Cadastro() {
                 {...field}
               >
                 <option value="">KM</option>
-                <option value="8">8KM</option>
-                <option value="16">16KM</option>
+                <option value="8KM">8KM</option>
+                <option value="16KM">16KM</option>
               </select>
             </div>
           )}
