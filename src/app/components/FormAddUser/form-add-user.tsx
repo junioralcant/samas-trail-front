@@ -247,7 +247,7 @@ export function FormAddUser({isShowCityField}: FormAddUserProps) {
                 <option value="">KM</option>
                 <option value="4KM">4KM</option>
                 <option value="8KM">8KM</option>
-                <option value="16KM">18KM</option>
+                <option value="18KM">18KM</option>
               </select>
             </div>
           )}
