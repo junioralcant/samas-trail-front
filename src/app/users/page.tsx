@@ -4,11 +4,15 @@ import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {UserModel} from '../page';
 import {toast} from 'react-toastify';
+import {Input} from '../components';
+import {useForm} from 'react-hook-form';
 
 type UserDTO = {id: string; paid: boolean} & UserModel;
 
 export default function Users() {
+  const {control, handleSubmit, setValue} = useForm<UserModel>();
   const [users, setUsers] = useState<UserDTO[]>([]);
+  const [searchCity, setSearchCity] = useState('');
 
   useEffect(() => {
     async function getUser() {
@@ -28,11 +32,31 @@ export default function Users() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    const userFiltered = users.filter((user) => {
+      return user.city
+        .toLowerCase()
+        .includes(searchCity.trim().toLowerCase());
+    });
+    setUsers(userFiltered);
+  }, [searchCity]);
+
   return (
     <div className="flex flex-col items-center justify-center relative overflow-x-auto px-11">
       <h1 className="dark:text-white font-bold text-3xl my-7">
         Listagem de atletas
       </h1>
+
+      <Input
+        control={control}
+        name="search-city"
+        label="Buscar por Cidade"
+        placeholder="Pesquisar por Cidade"
+        className="w-56 mb-3"
+        value={searchCity}
+        onChange={(e) => setSearchCity(e.target.value)}
+      />
+
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>

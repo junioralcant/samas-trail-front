@@ -18,6 +18,7 @@ export type UserModel = {
   team: string;
   distance: string;
   shirtSize: string;
+  sex: string;
 };
 
 export default function Cadastro() {
@@ -30,6 +31,7 @@ export default function Cadastro() {
   const [errorInputDistance, setErrorInputDistance] = useState(false);
   const [errorInputShirtSize, setErrorInputShirtSize] =
     useState(false);
+  const [errorInputSex, setErrorInputSex] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const {control, handleSubmit, setValue} = useForm<UserModel>();
@@ -96,11 +98,24 @@ export default function Cadastro() {
       toast.error('Informe o campo de Distância!');
       setErrorInputDistance(true);
       return;
+    } else {
+      setErrorInputDistance(false);
     }
+
     if (!data.shirtSize) {
       toast.error('Informe o tamanho da camisa!');
       setErrorInputShirtSize(true);
       return;
+    } else {
+      setErrorInputShirtSize(false);
+    }
+
+    if (!data.sex) {
+      toast.error('Informe o sexo do atleta!');
+      setErrorInputSex(true);
+      return;
+    } else {
+      setErrorInputSex(false);
     }
 
     try {
@@ -117,11 +132,12 @@ export default function Cadastro() {
           team: data.team || '',
           distance: data.distance,
           shirtSize: data.shirtSize,
+          sex: data.sex,
         },
         {headers: {'Content-Type': 'application/json'}}
       );
 
-      toast.success('Usuário cadastrado com sucesso!');
+      toast.success('Atleta cadastrado com sucesso!');
 
       setValue('name', '');
       setValue('cpf', '');
@@ -132,6 +148,7 @@ export default function Cadastro() {
       setValue('team', '');
       setValue('distance', '');
       setValue('shirtSize', '');
+      setValue('sex', '');
     } catch (error: any) {
       if (error.response.data.message === 'CPF already exists') {
         toast.error('CPF ja cadastrado!');
@@ -267,6 +284,24 @@ export default function Cadastro() {
             maxLength={15}
           />
         </Row>
+
+        <Controller
+          name="sex"
+          control={control}
+          render={({field}) => (
+            <div className="flex flex-col w-full">
+              <label className="text-gray-400">Sexo do atleta</label>
+              <select
+                className={`p-2 rounded w-full text-gray-500 ${errorInputSex ? 'border-red-500 border-2' : 'border-2'}`}
+                {...field}
+              >
+                <option value="">Escolha</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+          )}
+        />
 
         <Input
           label="Equipe"
