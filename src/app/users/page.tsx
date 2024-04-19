@@ -2,9 +2,8 @@
 
 import axios from 'axios';
 import {useEffect, useState} from 'react';
-import {UserModel} from '../page';
 import {toast} from 'react-toastify';
-import {Input} from '../components';
+import {Input, UserModel} from '../components';
 import {useForm} from 'react-hook-form';
 
 type UserDTO = {id: string; paid: boolean} & UserModel;

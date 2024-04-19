@@ -4,3 +4,4 @@ export * from './Wallet/wallet';
 export * from './SuccessScreen/SuccessScreen';
 export * from './ErrorScreen/error-screen';
 export * from './PendingScreen/pending-screen';
+export * from './FormAddUser/form-add-user';
