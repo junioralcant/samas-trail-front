@@ -67,6 +67,9 @@ export default function Users() {
               CPF
             </th>
             <th scope="col" className="px-6 py-3">
+              Sexo
+            </th>
+            <th scope="col" className="px-6 py-3">
               E-mail
             </th>
             <th scope="col" className="px-6 py-3">
@@ -99,6 +102,7 @@ export default function Users() {
                 {user.name}
               </th>
               <td className="px-6 py-4">{user.cpf}</td>
+              <td className="px-6 py-4">{user.sex}</td>
               <td className="px-6 py-4">{user.email}</td>
               <td className="px-6 py-4">{user.shirtSize}</td>
               <td className="px-6 py-4">{user.phone}</td>

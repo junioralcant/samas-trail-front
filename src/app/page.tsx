@@ -25,7 +25,7 @@ export default function Cadastro() {
   const [errorInputName, setErrorInputName] = useState(false);
   const [errorInputCPF, setErrorInputCPF] = useState(false);
   const [errorInputAge, setErrorInputAge] = useState(false);
-  const [errorInputCity, setErrorInputCity] = useState(false);
+  // const [errorInputCity, setErrorInputCity] = useState(false);
   const [errorInputPhone, setErrorInputPhone] = useState(false);
   const [errorInputEmail, setErrorInputEmail] = useState(false);
   const [errorInputDistance, setErrorInputDistance] = useState(false);
@@ -39,7 +39,7 @@ export default function Cadastro() {
     setErrorInputName(false);
     setErrorInputCPF(false);
     setErrorInputAge(false);
-    setErrorInputCity(false);
+    // setErrorInputCity(false);
     setErrorInputPhone(false);
     setErrorInputEmail(false);
     setErrorInputDistance(false);
@@ -72,11 +72,11 @@ export default function Cadastro() {
       return;
     }
 
-    if (!data.city) {
-      toast.error('Preencha o campo de Cidade!');
-      setErrorInputCity(true);
-      return;
-    }
+    // if (!data.city) {
+    //   toast.error('Preencha o campo de Cidade!');
+    //   setErrorInputCity(true);
+    //   return;
+    // }
 
     if (!data.phone || data.phone.length < 15) {
       toast.error(
@@ -126,7 +126,8 @@ export default function Cadastro() {
           name: data.name,
           cpf: data.cpf,
           age: data.age,
-          city: data.city,
+          // city: data.city,
+          city: 'Prefeitura',
           phone: data.phone,
           email: data.email,
           team: data.team || '',
@@ -140,9 +141,9 @@ export default function Cadastro() {
       toast.success('Atleta cadastrado com sucesso!');
 
       setValue('name', '');
+      // setValue('city', '');
       setValue('cpf', '');
       setValue('age', '');
-      setValue('city', '');
       setValue('phone', '');
       setValue('email', '');
       setValue('team', '');
@@ -211,7 +212,7 @@ export default function Cadastro() {
           />
         </Row>
 
-        <Row>
+        {/* <Row>
           <Input
             label="Cidade"
             className="w-[48%]"
@@ -220,7 +221,7 @@ export default function Cadastro() {
             control={control}
             error={errorInputCity}
           />
-        </Row>
+        </Row> */}
 
         <Controller
           name="distance"
@@ -233,8 +234,9 @@ export default function Cadastro() {
                 {...field}
               >
                 <option value="">KM</option>
+                <option value="4KM">4KM</option>
                 <option value="8KM">8KM</option>
-                <option value="16KM">16KM</option>
+                <option value="16KM">18KM</option>
               </select>
             </div>
           )}
