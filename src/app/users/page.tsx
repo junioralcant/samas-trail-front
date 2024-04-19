@@ -43,7 +43,7 @@ export default function Users() {
   return (
     <div className="flex flex-col items-center justify-center relative overflow-x-auto px-11">
       <h1 className="dark:text-white font-bold text-3xl my-7">
-        Listagem de atletas
+        Listagem de atletas, {users.length}
       </h1>
 
       <Input
