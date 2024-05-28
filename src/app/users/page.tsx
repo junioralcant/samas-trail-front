@@ -6,7 +6,20 @@ import {toast} from 'react-toastify';
 import {Input, UserModel} from '../components';
 import {useForm} from 'react-hook-form';
 
-type UserDTO = {id: string; paid: boolean} & UserModel;
+type UserDTO = {
+  id: string;
+  paid: boolean;
+  name: string;
+  cpf: string;
+  age: string;
+  city: string;
+  phone: string;
+  email: string;
+  team: string;
+  distance: string;
+  shirtSize: string;
+  sex: string;
+};
 
 export default function Users() {
   const {control, handleSubmit, setValue} = useForm<UserModel>();
