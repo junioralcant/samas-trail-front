@@ -86,6 +86,9 @@ export default function Users() {
             <th scope="col" className="px-6 py-3">
               Pago
             </th>
+            <th scope="col" className="px-6 py-3">
+              Data de nascimento
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -110,6 +113,7 @@ export default function Users() {
               <td className="px-6 py-4">
                 {user.paid ? 'Sim' : 'Não'}
               </td>
+              <td className="px-6 py-4">{user.age}</td>
             </tr>
           ))}
         </tbody>

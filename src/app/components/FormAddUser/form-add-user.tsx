@@ -23,6 +23,7 @@ export type UserModel = {
   distance: string;
   shirtSize: string;
   sex: string;
+  paid: string;
 };
 
 type FormAddUserProps = {
@@ -143,6 +144,7 @@ export function FormAddUser({isShowCityField}: FormAddUserProps) {
           distance: data.distance,
           shirtSize: data.shirtSize,
           sex: data.sex,
+          paid: data.paid === 'Sim' ? true : false,
         },
         {headers: {'Content-Type': 'application/json'}}
       );
@@ -311,6 +313,23 @@ export function FormAddUser({isShowCityField}: FormAddUserProps) {
                 <option value="">Escolha</option>
                 <option value="M">M</option>
                 <option value="F">F</option>
+              </select>
+            </div>
+          )}
+        />
+
+        <Controller
+          name="paid"
+          control={control}
+          render={({field}) => (
+            <div className="flex flex-col w-full">
+              <label className="text-gray-400">Pagamento feito</label>
+              <select
+                className={`p-2 rounded w-full text-gray-500 border-2`}
+                {...field}
+              >
+                <option value="Nao">Não</option>
+                <option value="Sim">Sim</option>
               </select>
             </div>
           )}
