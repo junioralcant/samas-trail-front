@@ -73,6 +73,9 @@ export default function Users() {
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
+              ID
+            </th>
+            <th scope="col" className="px-6 py-3">
               Nome
             </th>
             <th scope="col" className="px-6 py-3">
@@ -105,11 +108,12 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users.map((user, index) => (
             <tr
               key={user.id}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
             >
+              <td className="px-6 py-4">{index + 1}</td>
               <th
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
