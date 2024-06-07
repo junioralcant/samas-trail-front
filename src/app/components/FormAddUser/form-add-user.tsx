@@ -276,7 +276,7 @@ export function FormAddUser({
                 {...field}
               >
                 <option value="">Escolha</option>
-                <option value="P">PP</option>
+                <option value="PP">PP</option>
                 <option value="P">P</option>
                 <option value="M">M</option>
                 <option value="G">G</option>
