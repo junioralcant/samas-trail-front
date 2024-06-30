@@ -141,7 +141,9 @@ export function FormAddUser({
           name: data.name,
           cpf: data.cpf,
           age: data.age,
-          city: isShowCityField ? data.city : 'Prefeitura - Sem Kit',
+          city: isShowCityField
+            ? data.city
+            : 'Prefeitura - Apenas Camisa',
           phone: data.phone,
           email: data.email,
           team: data.team || '',
